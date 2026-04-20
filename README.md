@@ -63,7 +63,7 @@ The output of this procedure should be the following:
         ii  libfranka                                            0.9.3-1                                    amd64        libfranka built using CMake
         ```
 
-      1. Check with `apt`:
+    1. Check with `apt`:
 
          ```bash
          apt list -i | grep libfranka
