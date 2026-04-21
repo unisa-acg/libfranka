@@ -2,6 +2,7 @@
 // Use of this source code is governed by the Apache-2.0 license, see LICENSE
 #include <cmath>
 #include <iostream>
+#include <string>
 
 #include <franka/exception.h>
 #include <franka/robot.h>
@@ -16,16 +17,29 @@
  */
 
 int main(int argc, char** argv) {
-  if (argc != 10) {
+  if (argc != 10 && argc != 11) {
     std::cerr << "Usage: " << argv[0] << " <robot-hostname> "
               << "<joint0> <joint1> <joint2> <joint3> <joint4> <joint5> <joint6> "
-              << "<speed-factor>" << std::endl
+              << "<speed-factor> [realtime_config]" << std::endl
               << "joint0 to joint6 are joint angles in [rad]." << std::endl
-              << "speed-factor must be between zero and one." << std::endl;
+              << "speed-factor must be between zero and one." << std::endl
+              << "realtime_config: 'enforce' (default) or 'ignore'" << std::endl;
     return -1;
   }
+
+  // Parse realtime configuration argument (default: kEnforce)
+  franka::RealtimeConfig realtime_config = franka::RealtimeConfig::kEnforce;
+  if (argc == 11) {
+    try {
+      realtime_config = getRealtimeConfigFromString(argv[10]);
+    } catch (const std::invalid_argument& e) {
+      std::cerr << e.what() << std::endl;
+      return -1;
+    }
+  }
+
   try {
-    franka::Robot robot(argv[1]);
+    franka::Robot robot(argv[1], realtime_config);
     setDefaultBehavior(robot);
 
     std::array<double, 7> q_goal;

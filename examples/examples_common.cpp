@@ -6,6 +6,7 @@
 #include <array>
 #include <cmath>
 
+#include <franka/control_types.h>
 #include <franka/exception.h>
 #include <franka/robot.h>
 
@@ -17,6 +18,17 @@ void setDefaultBehavior(franka::Robot& robot) {
       {{10.0, 10.0, 10.0, 10.0, 10.0, 10.0}}, {{10.0, 10.0, 10.0, 10.0, 10.0, 10.0}});
   robot.setJointImpedance({{3000, 3000, 3000, 2500, 2500, 2000, 2000}});
   robot.setCartesianImpedance({{3000, 3000, 3000, 300, 300, 300}});
+}
+
+franka::RealtimeConfig getRealtimeConfigFromString(const std::string& config_str) {
+  if (config_str == "enforce") {
+    return franka::RealtimeConfig::kEnforce;
+  } else if (config_str == "ignore") {
+    return franka::RealtimeConfig::kIgnore;
+  } else {
+    throw std::invalid_argument("Invalid realtime config: '" + config_str +
+                                "'. Use 'enforce' or 'ignore'.");
+  }
 }
 
 MotionGenerator::MotionGenerator(double speed_factor, const std::array<double, 7> q_goal)

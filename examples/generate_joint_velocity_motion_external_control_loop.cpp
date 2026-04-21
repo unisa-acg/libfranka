@@ -19,13 +19,25 @@
 
 int main(int argc, char** argv) {
   // Check whether the required arguments were passed
-  if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <robot-hostname>" << std::endl;
+  if (argc < 2 || argc > 3) {
+    std::cerr << "Usage: " << argv[0] << " <robot-hostname> [realtime_config]" << std::endl;
+    std::cerr << "  realtime_config: 'enforce' (default) or 'ignore'" << std::endl;
     return -1;
   }
 
+  // Parse realtime configuration argument
+  franka::RealtimeConfig realtime_config = franka::RealtimeConfig::kEnforce;  // default
+  if (argc == 3) {
+    try {
+      realtime_config = getRealtimeConfigFromString(argv[2]);
+    } catch (const std::invalid_argument& e) {
+      std::cerr << e.what() << std::endl;
+      return -1;
+    }
+  }
+
   try {
-    franka::Robot robot(argv[1]);
+    franka::Robot robot(argv[1], realtime_config);
     setDefaultBehavior(robot);
 
     // First move the robot to a suitable joint configuration

@@ -30,8 +30,10 @@ int main(int argc, char** argv) {
       return -1;
     }
 
+    // Do a homing in order to estimate the maximum grasping width with the current fingers.
     if (homing) {
-      // Do a homing in order to estimate the maximum grasping width with the current fingers.
+      std::cout << "About to perform homing. Press Enter to continue..." << std::endl;
+      std::cin.ignore();
       gripper.homing();
     }
 
@@ -43,6 +45,9 @@ int main(int argc, char** argv) {
     }
 
     // Grasp the object.
+    std::cout << "About to grasp object with width " << grasping_width
+              << " m. Press Enter to continue..." << std::endl;
+    std::cin.ignore();
     if (!gripper.grasp(grasping_width, 0.1, 60)) {
       std::cout << "Failed to grasp object." << std::endl;
       return -1;
@@ -57,7 +62,13 @@ int main(int argc, char** argv) {
       return -1;
     }
 
-    std::cout << "Grasped object, will release it now." << std::endl;
+    // Release the object
+    std::cout << "Grasped object. Press Enter to release it..." << std::endl;
+    std::cin.ignore();
+    if (!gripper.move(gripper_state.max_width, 0.1)) {
+      std::cout << "Failed to open gripper." << std::endl;
+      return -1;
+    }
     gripper.stop();
   } catch (franka::Exception const& e) {
     std::cout << e.what() << std::endl;

@@ -24,6 +24,14 @@
 void setDefaultBehavior(franka::Robot& robot);
 
 /**
+ * @brief Parse the realtime config from string
+ *
+ * @param config_str "enforce" to enforce RT config, "ignore" to ignore
+ * @return franka::RealtimeConfig flag
+ */
+franka::RealtimeConfig getRealtimeConfigFromString(const std::string& config_str);
+
+/**
  * An example showing how to generate a joint pose motion to a goal position. Adapted from:
  * Wisama Khalil and Etienne Dombre. 2002. Modeling, Identification and Control of Robots
  * (Kogan Page Science Paper edition).
