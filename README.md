@@ -14,6 +14,7 @@ git clone --recurse-submodules git@github.com:unisa-acg/libfranka.git src/libfra
 cd src/libfranka
 git submodule update --init --recursive
 cd -
+sudo apt install libpoco-dev
 colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
