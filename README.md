@@ -5,16 +5,34 @@
 
 With this library, you can control research versions of Franka Robotics robots. See the [Franka Control Interface (FCI) documentation][fci-docs] for more information about what `libfranka` can do and how to set it up. The [generated API documentation][api-docs] also gives an overview of its capabilities.
 
+## Dependencies
+
+The dependency of this library can be resolved via `rosdep`:
+
+1. Move to your colcon workspace root folder, e.g.
+
+  ```bash
+  cd ~/ros2_ws/  # Change folder based on your system
+  ```
+
+2. Clone this repository
+
+  ```bash
+  git clone --recurse-submodules git@github.com:unisa-acg/libfranka.git src/libfranka
+  git submodule update --init --recursive
+  ```
+
+3. Install dependencies (you need to be a superuser to do so)
+
+  ```bash
+  rosdep install --from-paths src -y -i
+  ```
+
 ## Install
 
-This library can be installed by following these steps from your colcon workspace root:
+This library can be installed via `colcon` from your colcon workspace root:
 
 ```bash
-git clone --recurse-submodules git@github.com:unisa-acg/libfranka.git src/libfranka
-cd src/libfranka
-git submodule update --init --recursive
-cd -
-sudo apt install libpoco-dev
 colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
