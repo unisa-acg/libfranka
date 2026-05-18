@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>libfranka</name>
+  <version>0.9.3</version>
+  <description>C++ library for Franka Robotics research robots</description>
+  <maintainer email="eferrentino@unisa.it">Enrico Ferrentino</maintainer> 
+  <author email="vipetrone@unisa.it">Vincenzo Petrone</author>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>cmake</buildtool_depend>
+
+  <build_depend>libpoco-dev</build_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
