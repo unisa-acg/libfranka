@@ -19,7 +19,9 @@ The dependency of this library can be resolved via `rosdep`:
 
   ```bash
   git clone --recurse-submodules git@github.com:unisa-acg/libfranka.git src/libfranka
+  cd src/libfranka/
   git submodule update --init --recursive
+  cd -
   ```
 
 3. Install dependencies (you need to be a superuser to do so)
