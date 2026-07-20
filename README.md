@@ -35,7 +35,7 @@ The dependency of this library can be resolved via `rosdep`:
 This library can be installed via `colcon` from your colcon workspace root:
 
 ```bash
-colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+colcon build --packages-up-to libfranka --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
 If some compilation workings appear on `googletest`, you can safely ignore them.
