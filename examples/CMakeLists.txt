@@ -61,6 +61,7 @@ endforeach()
 target_link_libraries(joint_impedance_control Threads::Threads)
 target_link_libraries(motion_with_control Poco::Foundation)
 target_link_libraries(motion_with_control_external_control_loop Poco::Foundation)
+target_link_libraries(generate_joint_position_motion_external_control_loop franka_tracing)
 
 include(GNUInstallDirs)
 install(TARGETS ${EXAMPLES}

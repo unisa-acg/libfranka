@@ -49,6 +49,37 @@ if(BUILD_COVERAGE)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --coverage")
 endif()
 
+## LTTng-UST instrumentation (franka_timing tracepoint provider)
+option(WITH_LTTNG "Instrument the FCI loop with LTTng-UST tracepoints (needs liblttng-ust-dev >= 2.13)" ON)
+set(FRANKA_LTTNG_ENABLED FALSE)
+if(WITH_LTTNG)
+  find_path(LTTNG_UST_INCLUDE_DIR NAMES lttng/tracepoint.h)
+  find_library(LTTNG_UST_LIBRARY NAMES lttng-ust)
+  if(LTTNG_UST_INCLUDE_DIR AND LTTNG_UST_LIBRARY)
+    set(FRANKA_LTTNG_ENABLED TRUE)
+  else()
+    message(WARNING "WITH_LTTNG is ON but liblttng-ust-dev (>= 2.13) was not found; "
+                    "building without FCI loop instrumentation. Install liblttng-ust-dev "
+                    "or pass -DWITH_LTTNG=OFF to silence this warning.")
+  endif()
+endif()
+
+if(FRANKA_LTTNG_ENABLED)
+  enable_language(C)
+  add_library(franka_tracing STATIC tracing/tp.c)
+  target_include_directories(franka_tracing PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tracing>
+  )
+  target_include_directories(franka_tracing SYSTEM PUBLIC ${LTTNG_UST_INCLUDE_DIR})
+  target_link_libraries(franka_tracing PUBLIC ${LTTNG_UST_LIBRARY})
+  target_compile_definitions(franka_tracing PUBLIC FRANKA_WITH_LTTNG_UST)
+else()
+  add_library(franka_tracing INTERFACE)
+  target_include_directories(franka_tracing INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tracing>
+  )
+endif()
+
 ## Submodules
 add_subdirectory(common)
 

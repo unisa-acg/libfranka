@@ -40,6 +40,22 @@ colcon build --packages-up-to libfranka --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 If some compilation workings appear on `googletest`, you can safely ignore them.
 
+## Tracing FCI loop timing (LTTng-UST)
+
+The `generate_joint_position_motion_external_control_loop` example is instrumented with a `franka_timing` LTTng-UST tracepoint provider, so FCI read/write timings can be captured and compared against traces from the `franka_hardware` plugins in `franka_ros2`, which use the identical provider definition.
+It needs `liblttng-ust-dev` (2.13.x) and is built by default; pass `-DWITH_LTTNG=OFF` to disable it.
+
+Capture workflow:
+
+```bash
+lttng create franka-timing
+lttng enable-event -u 'franka_timing:*'
+lttng start
+./build/examples/generate_joint_position_motion_external_control_loop <robot-hostname>
+lttng stop
+lttng destroy
+```
+
 ## License
 
 `libfranka` is licensed under the [Apache 2.0 license][apache-2.0].

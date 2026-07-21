@@ -8,6 +8,7 @@
 #include <franka/exception.h>
 #include <franka/robot.h>
 #include "examples_common.h"
+#include "tp.h"
 /**
  * @example generate_joint_position_motion_external_control_loop.cpp
  * An example showing how to generate a joint position motion with an external control loop..
@@ -74,7 +75,10 @@ int main(int argc, char** argv) {
                                         initial_position[4] + delta_angle, initial_position[5],
                                         initial_position[6] + delta_angle}};
 
-      if (time >= 5.0) {
+      // The motion is periodic with a 5 s period (cos(pi/2.5 * time) completes a full cycle every
+      // 5 s), so running it out to 60 s loops the same motion 12 times to get a sample count
+      // comparable to a benchmark run.
+      if (time >= 60.0) {
         std::cout << std::endl << "Finished motion, shutting down example" << std::endl;
         return franka::MotionFinished(output);
       }
@@ -85,12 +89,18 @@ int main(int argc, char** argv) {
     auto active_control = robot.startJointPositionControl(
         research_interface::robot::Move::ControllerMode::kJointImpedance);
     while (!motion_finished) {
+      tracepoint(franka_timing, read_entry);
       auto read_once_return = active_control->readOnce();
       auto robot_state = read_once_return.first;
       auto duration = read_once_return.second;
+      tracepoint(franka_timing, read_exit, robot_state.time.toMSec());
+
       auto joint_positions = control_callback(robot_state, duration);
       motion_finished = joint_positions.motion_finished;
+
+      tracepoint(franka_timing, write_entry);
       active_control->writeOnce(joint_positions);
+      tracepoint(franka_timing, write_exit);
     }
 
   } catch (const franka::Exception& e) {
