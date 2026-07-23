@@ -47,13 +47,13 @@ constexpr std::array<double, 7> kMaxTorqueRate{
  * Maximum joint jerk
  */
 constexpr std::array<double, 7> kMaxJointJerk{
-    {7500.0 - kLimitEps, 3750.0 - kLimitEps, 5000.0 - kLimitEps, 6250.0 / 2.0 - kLimitEps,
+    {7500.0 - kLimitEps, 3750.0 - kLimitEps, 5000.0 - kLimitEps, 6250.0 - kLimitEps,
      7500.0 - kLimitEps, 10000.0 - kLimitEps, 10000.0 - kLimitEps}};
 /**
  * Maximum joint acceleration
  */
 constexpr std::array<double, 7> kMaxJointAcceleration{
-    {15.0000 - kLimitEps, 7.500 - kLimitEps, 10.0000 - kLimitEps, 12.5000 / 2.0 - kLimitEps,
+    {15.0000 - kLimitEps, 7.500 - kLimitEps, 10.0000 - kLimitEps, 12.5000 - kLimitEps,
      15.0000 - kLimitEps, 20.0000 - kLimitEps, 20.0000 - kLimitEps}};
 
 /**
