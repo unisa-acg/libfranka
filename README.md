@@ -51,7 +51,7 @@ Capture workflow:
 lttng create franka-timing
 lttng enable-event -u 'franka_timing:*'
 lttng start
-./build/examples/generate_joint_position_motion_external_control_loop <robot-hostname>
+./build/libfranka/examples/generate_joint_position_motion_external_control_loop <robot-hostname>
 lttng stop
 lttng destroy
 ```
